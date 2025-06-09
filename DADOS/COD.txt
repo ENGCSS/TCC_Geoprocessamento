@@ -1,0 +1,21 @@
+Estrutura para criar uma camada virtual com SQL (desconsidere as aspas):
+
+SELECT Origem, Destino, "2010", "2019", "2023", 
+       make_line(a.geometry, b.geometry)
+FROM O_D
+JOIN Centroides a ON O_D.Origem = a.nome_mun
+JOIN Centroides b ON O_D.Destino = b.nome_mun
+WHERE a.nome_mun != b.nome_mun
+
+Código para tornar a linha curva (desconsidere as aspas):
+
+make_line(
+   start_point($geometry),
+   centroid(
+      offset_curve(
+         $geometry, 
+         length($geometry)/15.0
+      )
+   ),
+   end_point($geometry)
+)
